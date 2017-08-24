@@ -38,6 +38,5 @@ function getCrisis(id: number|string) {
         .find( crisis => crisis.id === id);
 }
 
-let c: Crisis;
-getCrisis(4).subscribe( s => c = s);
-console.log('c: %s', c.name);
+getCrisis(4).subscribe( c => console.log('crisis[4]: %s', c.name));
+
