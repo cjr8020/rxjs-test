@@ -291,8 +291,44 @@ getCrisis(4).subscribe( c => console.log('crisis[4]: %s', c.name));
 
 #### concat operators
 
+If you want to be sure that the order of emissions is the same as the order
+in which you specified the source Observables.
+
+concat* operators subscribe to an Observable only after the previous
+Observable completes.
+
+
+##### concat
+
 ```
 ////////////  concat operators ////////////
+
+// ---------------- concat ----------------------
+
+var source1 = Observable.of(1,2,3,4,5);
+var source2 = Observable.of(6,7,8,9,10);
+
+var source = Observable.concat(source1, source2);
+
+var subscription = source.subscribe(
+    (next) => {
+        console.log('Next: %s', next);
+    },
+(error) => {
+        console.log('Error: %s', error);
+    },
+    () => {
+        console.log('Complete');
+    }
+);
+```
+
+
+##### concatMap
+
+
+```
+////////////  concatMap operators ////////////
 
 
 // const source = Observable.of('Hello', 'Goodbye');
