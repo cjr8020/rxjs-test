@@ -2,41 +2,17 @@ import { Observable } from 'rxjs';
 
 import 'rxjs/add/observable/from';
 
-////////////  Observable from array of values ////////////
+////////////  concat operators ////////////
 
-// let numbersArray: number[] = [1,2,3];
+
+// const source = Observable.of('Hello', 'Goodbye');
 //
-// let source: Observable<number> = Observable.from(numbersArray);
-// source.subscribe(
-//     n => console.log('Next number: %s', n),
-//     error => console.log('error: %s', error),
-//     () => console.log('Completed')
-// );
-
-export class Crisis {
-    constructor(
-        public id: number,
-        public name: string
-    ) {}
-}
-const CRISES = [
-    new Crisis(1, 'Dragon Burning Cities'),
-    new Crisis(2, 'Sky Rains Great White Sharks'),
-    new Crisis(3, 'Giant Asteroid Heading for Earth'),
-    new Crisis(4, 'Procrastinators Meeting Delayed Again')
-];
-
-// let source = Observable.from(CRISES)
-//     .find( (x) => { return x.id === 4});
+// const example = source.concatMap( (val) => Observable.of(`${val} World!`));
 //
-// let subscription = source.subscribe(
-//     crisis => console.log('crisis: %s', crisis.name)
-// );
+// const subscribe = example.subscribe( val => console.log('Example One: ', val));
 
-function getCrisis(id: number|string) {
-    return Observable.from(CRISES)
-        .find( crisis => crisis.id === id);
-}
 
-getCrisis(4).subscribe( c => console.log('crisis[4]: %s', c.name));
+Observable.of('Hello', 'Goodbye')
+    .concatMap( val => Observable.of(`${val} World!`))
+    .subscribe( val =>  console.log('Example One: ', val));
 
