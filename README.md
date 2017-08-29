@@ -1,4 +1,4 @@
-# ps-rxjs5
+# rxjs-test
 
 #### setup
 
