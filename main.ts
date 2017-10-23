@@ -4,47 +4,42 @@ import 'rxjs/add/observable/from';
 
 ////////////  concat operators ////////////
 
-// ---------------- concat ----------------------
+// ---------------- take ----------------------
 
-// var source1 = Observable.of(1,2,3,4,5);
-// var source2 = Observable.of(6,7,8,9,10);
+// const source = Observable.of(1,2,3,4,5);
+// // take the first emitted value then complete
+// source.take(1)
+//     .subscribe( el => {
+//        console.log(`first emitted element: ${el}`);
+//     });
+
+// Observable.interval(1000)
+//     .take(5)  // take the first 5 emitted values
+//     .subscribe( val => {
+//         console.log(`emitted val: ${val}`);
+//     });
+
+
+console.log('---------------- mergeMap ---------------------');
+
+const outer$:Observable<number> = Observable.interval(50).take(5);
+const inner$:Observable<number> = Observable.interval(2000).take(1);
+
+const source$:Observable<string> = outer$.mergeMap( x => {
+    return inner$.map( y => `${x}:${y}`);
+});
+
+source$.subscribe( r => console.log(r) );
+
+
+
+// console.log('---------------- switchMap ---------------------');
 //
-// var source = Observable.concat(source1, source2);
+// const outer$:Observable<number> = Observable.interval(50).take(5);
+// const inner$:Observable<number> = Observable.interval(2000).take(1);
 //
-// var subscription = source.subscribe(
-//     (next) => {
-//         console.log('Next: %s', next);
-//     },
-// (error) => {
-//         console.log('Error: %s', error);
-//     },
-//     () => {
-//         console.log('Complete');
-//     }
-// );
-
-
-
-// ---------------- concatMap ---------------------
-
-// const source = Observable.of('Hello', 'Goodbye');
+// const source$:Observable<string> = outer$.switchMap( x => {
+//     return inner$.map( y => `${x}:${y}`);
+// });
 //
-// const example = source.concatMap( (val) => Observable.of(`${val} World!`));
-//
-// const subscribe = example.subscribe( val => console.log('Example One: ', val));
-
-
-Observable.of('Hello', 'Goodbye')
-    // .map( val => console.log('first observable val=%s', val))  // with map here, 'val' below is undefined
-    .concatMap( val => Observable.of(`${val} World!`))
-    .subscribe( val =>  console.log('Example One: ', val));
-
-
-
-let myFunction =  function(): Observable<any> {
-    return Observable.of(1);
-    // return Observable.empty(); // <-- will cause myFunction to NOT execute ..
-};
-
-const mSource = myFunction().map( () => console.log('hello from myFunction'));
-const mSubscribe = mSource.subscribe()
+// source$.subscribe( r => console.log(r) );
