@@ -1,35 +1,84 @@
-import { Observable } from 'rxjs';
+import {from, Observable, of} from 'rxjs';
+import {map, take, tap} from 'rxjs/operators';
 
-import 'rxjs/add/observable/from';
-
-////////////  concat operators ////////////
-
-// ---------------- take ----------------------
-
-// const source = Observable.of(1,2,3,4,5);
-// // take the first emitted value then complete
-// source.take(1)
-//     .subscribe( el => {
-//        console.log(`first emitted element: ${el}`);
-//     });
-
-// Observable.interval(1000)
-//     .take(5)  // take the first 5 emitted values
-//     .subscribe( val => {
-//         console.log(`emitted val: ${val}`);
-//     });
+console.log(' ********** main.ts ************');
 
 
-console.log('---------------- mergeMap ---------------------');
 
-const outer$:Observable<number> = Observable.interval(50).take(5);
-const inner$:Observable<number> = Observable.interval(2000).take(1);
+////////////  piping thru a set of operators ////////////
 
-const source$:Observable<string> = outer$.mergeMap( x => {
-    return inner$.map( y => `${x}:${y}`);
-});
+from([20, 15, 10, 5])
+  .pipe(
+    tap(item => console.log(`emitted item: ${item}`)),
+    map(item => item * 2),
+    map(item => item - 10),
+    map(item => {
+        if (item === 0) {
+            throw new Error('zero detected');
+        }
+        return item;
+    }),
+    take(3) // comment out to see an error
+  ).subscribe(
+  item => console.log(`resulting item: ${item}`),
+  err => console.error(`error occurred: ${err}`),
+  () => console.log('complete')
+);
 
-source$.subscribe( r => console.log(r) );
+
+
+////////////  piping thru a set of operators ////////////
+
+// of(2, 4, 6)
+//     .pipe(
+//         map(item => item * 2),
+//         tap(item => console.log(item)),
+//         take(2)
+//     ).subscribe(console.log);
+
+
+
+////////////  create an observer and observable ////////////
+
+// // will emit all elements of the array
+// const appleStream = from(['Apple1', 'Apple2']);
+//
+// const sub = appleStream.subscribe(
+//     apple => console.log(`Apple was emitted ${apple}`),
+//     err => console.log(`Error occurred: ${err}`),
+//     () => console.log(`No more apples, go home`)
+// );
+//
+// sub.unsubscribe();
+
+
+
+////////////  create an observer and observable ////////////
+
+// const appleStream = new Observable(appleObserver => {
+//   appleObserver.next('Apple 1');
+//   appleObserver.next('Apple 2');
+//   appleObserver.complete();
+// });
+//
+// const sub = appleStream.subscribe(
+//     apple => console.log(`Apple was emitted ${apple}`),
+//     err => console.log(`Error occurred: ${err}`),
+//     () => console.log(`No more apples, go home`)
+// );
+//
+// sub.unsubscribe();
+
+// console.log('---------------- mergeMap ---------------------');
+//
+// const outer$:Observable<number> = Observable.interval(50).take(5);
+// const inner$:Observable<number> = Observable.interval(2000).take(1);
+//
+// const source$:Observable<string> = outer$.mergeMap( x => {
+//     return inner$.map( y => `${x}:${y}`);
+// });
+//
+// source$.subscribe( r => console.log(r) );
 
 
 

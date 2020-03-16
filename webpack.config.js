@@ -1,14 +1,9 @@
 module.exports = {
+  mode: 'development',
+  devtool: 'inline-source-map',
   entry: "./main",
   output: {
     filename: "./js/bundle.js"
-  },
-  module: {
-    loaders: [
-      { 
-        test: /\.ts$/, 
-        loader: "ts-loader" }
-    ]
   },
   resolve: {
     extensions: [".ts", ".js"]
