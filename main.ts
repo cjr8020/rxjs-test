@@ -1,8 +1,20 @@
-import {from, Observable, of} from 'rxjs';
-import {map, take, tap} from 'rxjs/operators';
+import {from, of, EMPTY} from 'rxjs';
+import {filter, map, take, tap} from 'rxjs/operators';
+
 
 console.log(' ********** main.ts ************');
 
+////////////  empty Observable ////////////
+
+console.log(`EMPTY constant example`);
+EMPTY.pipe(
+  tap( () => console.warn('i will not reach here, as i am complete'))
+).subscribe();
+
+console.log(`of({}) creates Observable, emits next with value of {} and completes.`);
+of({}).pipe(
+  tap(() => console.warn('i WILL reach here and complete'))
+).subscribe();
 
 
 ////////////  piping thru a set of operators ////////////
@@ -25,6 +37,23 @@ from([20, 15, 10, 5])
   () => console.log('complete')
 );
 
+
+from( [
+  'Supplier 1',
+  'Supplier 2'
+])
+  .pipe(
+    tap( supplier => console.log(`emitted supplier: ${supplier}`)),
+    filter(
+      supplier => (
+        supplier === 'Supplier 1'
+      )
+    )
+  ).subscribe(
+    supplier => console.log(`resulting supplier: ${supplier}`),
+  err => console.error(`error occurred: ${err}`),
+  () => console.log('complete')
+);
 
 
 ////////////  piping thru a set of operators ////////////
@@ -92,3 +121,9 @@ from([20, 15, 10, 5])
 // });
 //
 // source$.subscribe( r => console.log(r) );
+
+
+
+
+
+
